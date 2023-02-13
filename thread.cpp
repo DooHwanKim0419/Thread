@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <vector>
 
 using namespace std;
 
@@ -32,20 +33,34 @@ class Worker {
                         break;
                     default:
                         break;
-
                 }
             }
         }
 
         void onStart() {
+            cout << "WORKER " << workerId << " HAS STARTED" << endl;
             state = STATE::RUNNING;
         }
 
         void onRunning() {
+            cout << "WORKER " << workerId << " HAS ENDED" << endl;
             state = STATE::TERMINATED;
         }
 };
 
 int main(int argc, char *argv[]) {
-    cout << "hi" << endl;
+    vector<Worker> workers;
+    vector<thread> threads;
+
+    for (int i = 0; i < 3; i++) {
+        workers.push_back(Worker(i));
+    }
+
+    for (int i = 0; i < 3; i++) {
+        threads.push_back(thread(&Worker::init, &workers[i]));
+    }
+ 
+    for (auto& t : threads) {
+        t.join();
+    }
 }
