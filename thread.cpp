@@ -1,8 +1,10 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <mutex>
 
 using namespace std;
+static mutex cout_handler;
 
 enum STATE {
     NOT_STARTED,
@@ -38,13 +40,17 @@ class Worker {
         }
 
         void onStart() {
+            cout_handler.lock();
             cout << "WORKER " << workerId << " HAS STARTED" << endl;
             state = STATE::RUNNING;
+            cout_handler.unlock();
         }
 
         void onRunning() {
+            cout_handler.lock();
             cout << "WORKER " << workerId << " HAS ENDED" << endl;
             state = STATE::TERMINATED;
+            cout_handler.unlock();
         }
 };
 
