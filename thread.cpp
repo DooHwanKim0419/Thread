@@ -15,6 +15,7 @@ enum STATE {
 class Worker {
     public:
         Worker(int id) : workerId(id), state(STATE::NOT_STARTED) {}
+        ~Worker() {}
 
         void init() {
             run();
@@ -39,14 +40,14 @@ class Worker {
             }
         }
 
-        void onStart() {
+        virtual void onStart() {
             cout_handler.lock();
             cout << "WORKER " << workerId << " HAS STARTED" << endl;
             state = STATE::RUNNING;
             cout_handler.unlock();
         }
 
-        void onRunning() {
+        virtual void onRunning() {
             cout_handler.lock();
             cout << "WORKER " << workerId << " HAS ENDED" << endl;
             state = STATE::TERMINATED;
