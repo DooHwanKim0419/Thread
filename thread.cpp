@@ -15,7 +15,7 @@ enum STATE {
 class Worker {
     public:
         Worker(int id) : workerId(id), state(STATE::NOT_STARTED) {}
-        ~Worker() {}
+        virtual ~Worker() {}
 
         void init() {
             run();
